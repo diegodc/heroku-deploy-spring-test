@@ -2,6 +2,7 @@ package app;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Properties;
 
 @RestController
@@ -15,8 +16,12 @@ public class Controller {
 
     @GetMapping(value = "/properties")
     public Properties getProperties() {
-
         return System.getProperties();
+    }
+
+    @GetMapping(value = "/environment")
+    public Map<String, String> getEnvironment() {
+        return System.getenv();
     }
 
 }
