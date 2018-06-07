@@ -11,7 +11,7 @@ public class Controller {
 
     @GetMapping
     public String get() {
-        return "Application Deployed!";
+        return "Application Deployed!!!";
     }
 
     @GetMapping(value = "/properties")
