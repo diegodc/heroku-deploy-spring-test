@@ -2,12 +2,14 @@ package app;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -33,12 +35,16 @@ public class Controller {
 
     @GetMapping(value = "/log")
     public List<String> log() throws IOException {
-        Path path = Paths.get("log.txt");
-        List<String> lines = List.of(LocalDateTime.now().toString());
 
-        Files.write(path, lines, Charset.forName("UTF-8"));
+        Path log = Paths.get("log.txt");
 
-        return Files.readAllLines(path);
+        String login = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+
+        try (BufferedWriter writer = Files.newBufferedWriter(log, StandardCharsets.UTF_8, StandardOpenOption.WRITE)) {
+            writer.append(login);
+        }
+
+        return Files.readAllLines(log);
     }
 
 }
