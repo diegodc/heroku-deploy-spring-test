@@ -3,6 +3,7 @@ package app;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -36,15 +37,33 @@ public class Controller {
     @GetMapping(value = "/log")
     public List<String> log() throws IOException {
 
-        Path log = Paths.get("log.txt");
+        Path log = verifyLogFile();
 
-        String login = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        String login = getLoginStamp();
 
-        try (BufferedWriter writer = Files.newBufferedWriter(log, StandardCharsets.UTF_8, StandardOpenOption.WRITE)) {
-            writer.append(login);
-        }
+        write(log, login);
 
         return Files.readAllLines(log);
+    }
+
+    private Path verifyLogFile() throws IOException {
+        File file = Paths.get("log.txt").toFile();
+
+        if (!file.exists())
+            file.createNewFile();
+
+        return file.toPath();
+    }
+
+    private String getLoginStamp() {
+        return LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+    }
+
+    private void write(Path log, String login) throws IOException {
+        try (BufferedWriter writer = Files.newBufferedWriter(log, StandardCharsets.UTF_8, StandardOpenOption.APPEND)) {
+            writer.write(login);
+            writer.newLine();
+        }
     }
 
 }
