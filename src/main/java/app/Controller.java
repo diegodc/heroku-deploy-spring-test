@@ -7,7 +7,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -34,7 +34,7 @@ public class Controller {
     @GetMapping(value = "/log")
     public List<String> log() throws IOException {
         Path path = Paths.get("log.txt");
-        List<String> lines = List.of(LocalDate.now().toString());
+        List<String> lines = List.of(LocalDateTime.now().toString());
 
         Files.write(path, lines, Charset.forName("UTF-8"));
 
