@@ -14,7 +14,7 @@ public class Controller {
         return "Application Deployed!!!";
     }
 
-        @GetMapping(value = "/properties")
+    @GetMapping(value = "/properties")
     public Properties getProperties() {
         return System.getProperties();
     }
