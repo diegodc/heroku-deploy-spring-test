@@ -1,10 +1,14 @@
 package app;
 
-import org.hibernate.validator.internal.metadata.location.FieldConstraintLocation;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -27,21 +31,14 @@ public class Controller {
         return System.getenv();
     }
 
-    @GetMapping(value = "/file")
-    public String fileTest() {
-        File file = new File("test");
+    @GetMapping(value = "/log")
+    public List<String> log() throws IOException {
+        Path path = Paths.get("log.txt");
+        List<String> lines = List.of(LocalDate.now().toString());
 
-        if (file.exists()) {
-            file.delete();
-        }
+        Files.write(path, lines, Charset.forName("UTF-8"));
 
-        try {
-            file.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return String.valueOf(file.exists());
+        return Files.readAllLines(path);
     }
 
 }
